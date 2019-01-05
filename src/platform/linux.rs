@@ -239,9 +239,9 @@ fn stat_mount(mount: ProcMountsData) -> io::Result<Filesystem> {
             files: info.f_files as usize - info.f_ffree as usize,
             files_total: info.f_files as usize,
             files_avail: info.f_favail as usize,
-            free: ByteSize::b(info.f_bfree * info.f_bsize),
-            avail: ByteSize::b(info.f_bavail * info.f_bsize),
-            total: ByteSize::b(info.f_blocks * info.f_bsize),
+            free: ByteSize::b(info.f_bfree as u64 * info.f_bsize as u64),
+            avail: ByteSize::b(info.f_bavail as u64 * info.f_bsize as u64),
+            total: ByteSize::b(info.f_blocks as u64 * info.f_bsize as u64),
             name_max: info.f_namemax as usize,
             fs_type: mount.fstype,
             fs_mounted_from: mount.source,
@@ -330,27 +330,27 @@ impl Platform for PlatformImpl {
                 let unit = info.mem_unit as u64;
                 meminfo.insert(
                     "MemTotal".to_owned(),
-                    ByteSize::b(info.totalram * unit),
+                    ByteSize::b(info.totalram as u64 * unit),
                 );
                 meminfo.insert(
                     "MemFree".to_owned(),
-                    ByteSize::b(info.freeram * unit),
+                    ByteSize::b(info.freeram as u64 * unit),
                 );
                 meminfo.insert(
                     "Shmem".to_owned(),
-                    ByteSize::b(info.sharedram * unit),
+                    ByteSize::b(info.sharedram as u64 * unit),
                 );
                 meminfo.insert(
                     "Buffers".to_owned(),
-                    ByteSize::b(info.bufferram * unit),
+                    ByteSize::b(info.bufferram as u64 * unit),
                 );
                 meminfo.insert(
                     "SwapTotal".to_owned(),
-                    ByteSize::b(info.totalswap * unit),
+                    ByteSize::b(info.totalswap as u64 * unit),
                 );
                 meminfo.insert(
                     "SwapFree".to_owned(),
-                    ByteSize::b(info.freeswap * unit),
+                    ByteSize::b(info.freeswap as u64 * unit),
                 );
                 Ok(meminfo)
             })
