@@ -2,7 +2,7 @@ extern crate systemstat;
 
 use std::thread;
 use std::time::Duration;
-use systemstat::{System, Platform};
+use systemstat::{System, Platform, ByteSize};
 
 fn main() {
     let sys = System::new();
@@ -55,14 +55,14 @@ fn main() {
                    battery.remaining_time.as_secs() % 60),
         Err(x) => print!("\nBattery: error: {}", x)
     }
-    
+
     match sys.on_ac_power() {
         Ok(power) => println!(", AC power: {}", power),
         Err(x) => println!(", AC power: error: {}", x)
     }
 
     match sys.memory() {
-        Ok(mem) => println!("\nMemory: {} used / {} ({} bytes) total ({:?})", mem.total - mem.free, mem.total, mem.total.as_usize(), mem.platform_memory),
+        Ok(mem) => println!("\nMemory: {} used / {} ({} bytes) total ({:?})", ByteSize::b(mem.total.as_u64() - mem.free.as_u64()), mem.total, mem.total.as_u64(), mem.platform_memory),
         Err(x) => println!("\nMemory: error: {}", x)
     }
 
